@@ -11,14 +11,23 @@ public class Ship : MonoBehaviour
     private float _minTreshold = 0.03f;
     [SerializeField]
     private float _maxTreshold = 0.97f;
+    
 
     private Transform _myTransform;
     private Camera _mainCamera;
+    private IInput _inputController;
+    private CheckLimits _checkLimits;
 
     private void Awake()
     {
         _myTransform = transform;
         _mainCamera = Camera.main;
+    }
+
+    public void Configure(IInput input, CheckLimits checkLimits)
+    {
+        _inputController = input;
+        _checkLimits = checkLimits;
     }
 
     // Update is called once per frame
@@ -31,22 +40,12 @@ public class Ship : MonoBehaviour
     private void Move(Vector2 direction)
     {
         _myTransform.Translate(direction * (_speed * Time.deltaTime));
-        ClampFinalPosition();
+        _checkLimits.ClampFinalPosition();
         
-    }
-
-    private void ClampFinalPosition()
-    {
-        Vector3 viewportPoint = _mainCamera.WorldToViewportPoint(_myTransform.position);
-        viewportPoint.x = Mathf.Clamp(viewportPoint.x, _minTreshold, _maxTreshold);
-        viewportPoint.y = Mathf.Clamp(viewportPoint.y, _minTreshold, _maxTreshold);
-        _myTransform.position = _mainCamera.ViewportToWorldPoint(viewportPoint);
     }
 
     private Vector2 GetDirection()
     {
-        float horizontalDir = Input.GetAxis("Horizontal");
-        float verticalDir = Input.GetAxis("Vertical");
-        return new Vector2(horizontalDir, verticalDir);
+        return _inputController.GetDirection();
     }
 }
