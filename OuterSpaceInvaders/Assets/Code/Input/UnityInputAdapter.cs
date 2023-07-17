@@ -10,4 +10,9 @@ public class UnityInputAdapter : IInput
         float verticalDir = Input.GetAxis("Vertical");
         return new Vector2(horizontalDir, verticalDir);
     }
+
+    public bool IsFireActionPressed()
+    {
+        return Input.GetButton("Fire1");
+    }
 }

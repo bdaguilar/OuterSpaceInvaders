@@ -12,7 +12,9 @@ public class ShipInstaller : MonoBehaviour
     [SerializeField]
     private Joystick _joystick;
     [SerializeField]
-    private Ship _ship;
+    private JoyButton _joyButton;
+    [SerializeField]
+    private ShipMediator _shipMediator;
     [SerializeField]
     private float _maxDistance;
     [SerializeField]
@@ -23,18 +25,19 @@ public class ShipInstaller : MonoBehaviour
     private void Awake()
     {
         _joystick = GameObject.FindObjectOfType<Joystick>();
-        _ship = GameObject.FindGameObjectWithTag("Player").GetComponent<Ship>();
-        _ship.Configure(GetInput(), GetCheckLimits());
+        _joyButton = GameObject.FindGameObjectWithTag("FireButton").GetComponent<JoyButton>();
+        _shipMediator = GameObject.FindGameObjectWithTag("Player").GetComponent<ShipMediator>();
+        _shipMediator.Configure(GetInput(), GetCheckLimits());
     }
 
     private CheckLimits GetCheckLimits()
     {
         if (_useAI)
         {
-            return new InitialPositionCheckLimits(_ship.transform, _maxDistance);
+            return new InitialPositionCheckLimits(_shipMediator.transform, _maxDistance);
         }
 
-        return new ViewportCheckLimits(_ship.transform, Camera.main, _minTreshold, _maxTreshold);
+        return new ViewportCheckLimits(_shipMediator.transform, Camera.main, _minTreshold, _maxTreshold);
     }
 
     private IInput GetInput()
@@ -47,15 +50,16 @@ public class ShipInstaller : MonoBehaviour
 
         if (_useAI)
         {
-            return new AIInputAdapter(_ship);
+            return new AIInputAdapter(_shipMediator);
         }
 
         if (_useJoystick)
         {
-            return new JoystickIInputAdapter(_joystick);
+            return new JoystickIInputAdapter(_joystick, _joyButton);
         }
             
         Destroy(_joystick.gameObject);
+        Destroy(_joyButton.gameObject);
         return new UnityInputAdapter();
 
     }
