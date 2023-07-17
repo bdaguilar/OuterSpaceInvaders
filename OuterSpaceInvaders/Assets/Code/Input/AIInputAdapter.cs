@@ -8,10 +8,10 @@ public class AIInputAdapter : IInput
     private float _maxTreshold = 0.95f;
     private Transform _shipTransform;
     private Camera _mainCamera;
-    private readonly Ship _ship;
+    private ShipMediator _ship;
     private int _currentDirectionX;
 
-    public AIInputAdapter(Ship ship)
+    public AIInputAdapter(ShipMediator ship)
     {
         _ship = ship;
         _currentDirectionX = 1;
@@ -31,5 +31,10 @@ public class AIInputAdapter : IInput
         }
 
         return new Vector2(_currentDirectionX, 0);
+    }
+
+    public bool IsFireActionPressed()
+    {
+        return Random.Range(0, 100) < 20;
     }
 }
