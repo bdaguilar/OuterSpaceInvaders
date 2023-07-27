@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface CheckLimits
 {
-    void ClampFinalPosition();
+    Vector2 ClampFinalPosition(Vector2 _currentPosition);
 }

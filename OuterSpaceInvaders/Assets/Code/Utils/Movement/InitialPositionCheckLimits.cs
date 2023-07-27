@@ -15,21 +15,23 @@ public class InitialPositionCheckLimits : CheckLimits
         _intialPosition = _transform.position;
     }
 
-    public void ClampFinalPosition()
+    public Vector2 ClampFinalPosition(Vector2 currentPosition)
     {
-        Vector3 currentPosition = _transform.position;
         Vector3 finalPosition = currentPosition;
         float distance = Mathf.Abs(_intialPosition.x - currentPosition.x);
-        if (distance > _maxDistance)
+        if (distance <= _maxDistance)
         {
-            if(currentPosition.x > _intialPosition.x)
-            {
-                finalPosition.x = _intialPosition.x + _maxDistance;
-            }
-            else {
-                finalPosition.x = _intialPosition.x - _maxDistance;
-            }
+            return currentPosition;
         }
-        _transform.position = finalPosition;
+
+        if(currentPosition.x > _intialPosition.x)
+        {
+            finalPosition.x = _intialPosition.x + _maxDistance;
+        }
+        else
+        {
+            finalPosition.x = _intialPosition.x - _maxDistance;
+        }
+        return finalPosition;
     }
 }

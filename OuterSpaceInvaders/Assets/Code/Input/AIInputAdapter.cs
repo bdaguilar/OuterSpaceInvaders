@@ -9,7 +9,7 @@ public class AIInputAdapter : IInput
     private Transform _shipTransform;
     private Camera _mainCamera;
     private ShipMediator _ship;
-    private int _currentDirectionX;
+    private float _currentDirectionX;
 
     public AIInputAdapter(ShipMediator ship)
     {
@@ -24,13 +24,13 @@ public class AIInputAdapter : IInput
         Vector3 currentPos = _mainCamera.WorldToViewportPoint(_shipTransform.position);
         if(currentPos.x > _maxTreshold)
         {
-            _currentDirectionX = -1;
+            _currentDirectionX = _shipTransform.right.x;
         }else if(currentPos.x < _minTreshold)
         {
-            _currentDirectionX = 1;
+            _currentDirectionX = -_shipTransform.right.x;
         }
 
-        return new Vector2(_currentDirectionX, 0);
+        return new Vector2(_currentDirectionX, -1);
     }
 
     public bool IsFireActionPressed()

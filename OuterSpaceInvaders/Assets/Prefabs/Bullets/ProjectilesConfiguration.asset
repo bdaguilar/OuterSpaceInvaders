@@ -12,4 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbc36805f07df4ff48d10f13e7f37e0b, type: 3}
   m_Name: ProjectilesConfiguration
   m_EditorClassIdentifier: 
-  _projectilesIdPrefabs: []
+  _projectilesIdPrefabs:
+  - {fileID: 4140907403805532962, guid: 7ec43588f26124c6f8aa6b920274ccc2, type: 3}
+  - {fileID: -5388349680984098809, guid: 967a8b0d738a34cddb78978eef8417b2, type: 3}
+  - {fileID: 552776729619483506, guid: b21caf00396554bd0aa1e1b2ff369556, type: 3}

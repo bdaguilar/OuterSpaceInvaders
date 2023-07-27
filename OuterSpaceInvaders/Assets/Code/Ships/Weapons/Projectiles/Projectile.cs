@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public abstract class Projectile : MonoBehaviour
+public abstract class Projectile : MonoBehaviour, IDamageable
 {
     [SerializeField]
     private ProjectileId _projectileId;
@@ -17,6 +17,13 @@ public abstract class Projectile : MonoBehaviour
 
     protected Transform _transform;
     public string Id => _projectileId.Value;
+
+    public Teams Team { get; private set; }
+
+    public void Configure(Teams team)
+    {
+        Team = team;
+    }
 
     private void Start()
     {
@@ -37,7 +44,12 @@ public abstract class Projectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        DestroyProjectile();
+        IDamageable damageable = collision.GetComponent<IDamageable>();
+        if(damageable.Team == Team)
+        {
+            return;
+        }
+        damageable.AddDamage(1);
     }
 
     private IEnumerator DestroyIn(float seconds)
@@ -53,4 +65,9 @@ public abstract class Projectile : MonoBehaviour
     }
 
     protected abstract void DoDestroyIn();
+
+    public void AddDamage(int amout)
+    {
+        DestroyProjectile();
+    }
 }

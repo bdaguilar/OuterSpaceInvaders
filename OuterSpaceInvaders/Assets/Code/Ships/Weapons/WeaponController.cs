@@ -3,30 +3,33 @@ using UnityEngine;
 
 public class WeaponController : MonoBehaviour
 {
-    [SerializeField]
-    private float _fireRateInSeconds;
+    
     [SerializeField]
     private Transform _projectileSpawnPoint;
     [SerializeField]
-    private ProjectileId _defaultProjjectileId;
-    [SerializeField]
     private ProjectilesConfiguration _projectilesConfiguration;
-    
 
+    private ProjectileId _defaultProjjectileId;
+    private float _fireRateInSeconds;
     private IShip _ship;
     private float _cooldownSecondsToBeAbleToShoot;
     private ProjectileFactory _projectileFactory;
     private string _activeProjjectileId;
+    private Teams _team;
 
     private void Awake()
     {
         _projectileFactory = new ProjectileFactory(Instantiate(_projectilesConfiguration));
-        _activeProjjectileId = _defaultProjjectileId.Value;
+        
     }
 
-    public void Configure(IShip shipMediator)
+    public void Configure(IShip shipMediator, ProjectileId defaultProjectileId, float fireRate, Teams team)
     {
         _ship = shipMediator;
+        _defaultProjjectileId = defaultProjectileId;
+        _activeProjjectileId = _defaultProjjectileId.Value;
+        _fireRateInSeconds = fireRate;
+        _team = team;
     }
 
     public void TryShoot()
@@ -44,7 +47,7 @@ public class WeaponController : MonoBehaviour
     public void Shoot()
     {
         _cooldownSecondsToBeAbleToShoot = _fireRateInSeconds;
-        _projectileFactory.Create(_projectileSpawnPoint, _activeProjjectileId);
+        _projectileFactory.Create(_projectileSpawnPoint, _activeProjjectileId, _team);
     }
 }
 
