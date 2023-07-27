@@ -9,11 +9,14 @@ public class ProjectileFactory
 		_projectilesConfiguration = projectilesConfiguration;
 	}
 
-	public Projectile Create(Transform spawnPoint, string id)
+	public Projectile Create(Transform spawnPoint, string id, Teams team)
 	{
-		Projectile prefab = _projectilesConfiguration.GetProjectile(id);
+		Projectile prefab = _projectilesConfiguration.GetProjectileById(id);
+        Projectile projectile = Object.Instantiate(prefab, spawnPoint.position, spawnPoint.rotation);
+        projectile.Configure(team);
 
-		return Object.Instantiate(prefab, spawnPoint.position, spawnPoint.rotation);
-	}
+		return projectile;
+
+    }
 }
 

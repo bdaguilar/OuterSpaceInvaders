@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 7715408537229922443}
   - component: {fileID: 2921435387123174212}
   - component: {fileID: 4140907403805532962}
-  m_Layer: 0
+  - component: {fileID: 6074141890181261518}
+  m_Layer: 8
   m_Name: OrangeBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -117,7 +118,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _projectileId: {fileID: 11400000, guid: 734ee743220a44bd0a0a62a05fef19a0, type: 2}
+  _bulletLifeSpan: 0.5
   _speed: 5
   _rigidbody2D: {fileID: 0}
-  _transform: {fileID: 0}
-  _bulletLifeSpan: 0.5
+--- !u!70 &6074141890181261518
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 115845310126127708}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.00000023499514, y: 0}
+  m_Size: {x: 2.0495787, y: 5.12}
+  m_Direction: 0

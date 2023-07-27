@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 7715408537229922443}
   - component: {fileID: 2921435387123174212}
   - component: {fileID: -5388349680984098809}
-  m_Layer: 0
+  - component: {fileID: -1198116751491489793}
+  m_Layer: 8
   m_Name: GreenBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -117,9 +118,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _projectileId: {fileID: 11400000, guid: ad6d5cdcd90864a08b27ae175f8bf746, type: 2}
+  _bulletLifeSpan: 4
   _speed: 10
+  _rigidbody2D: {fileID: 0}
   _amplitude: 3
   _frequency: 20
-  _rigidbody2D: {fileID: 0}
-  _transform: {fileID: 0}
-  _bulletLifeSpan: 4
+--- !u!70 &-1198116751491489793
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 115845310126127708}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.00000023499514, y: 0}
+  m_Size: {x: 2.0495787, y: 5.12}
+  m_Direction: 0

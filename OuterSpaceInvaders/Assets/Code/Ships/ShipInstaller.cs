@@ -14,33 +14,42 @@ public class ShipInstaller : MonoBehaviour
     [SerializeField]
     private JoyButton _joyButton;
     [SerializeField]
-    private ShipMediator _shipMediator;
+    private ShipToSpawnConfiguration _shipConfiguration;
     [SerializeField]
-    private float _maxDistance;
-    [SerializeField]
-    private float _minTreshold;
-    [SerializeField]
-    private float _maxTreshold;
+    private ShipsConfiguration _shipsConfiguration;
+
+    private ShipBuilder _shipBuilder;
 
     private void Awake()
-    {
+    { 
         _joystick = GameObject.FindObjectOfType<Joystick>();
         _joyButton = GameObject.FindGameObjectWithTag("FireButton").GetComponent<JoyButton>();
-        _shipMediator = GameObject.FindGameObjectWithTag("Player").GetComponent<ShipMediator>();
-        _shipMediator.Configure(GetInput(), GetCheckLimits());
+        ShipFactory shipFactory = new ShipFactory(Instantiate(_shipsConfiguration));
+        _shipBuilder = shipFactory.Create(_shipConfiguration.ShipId.Value)
+            .WithConfiguration(_shipConfiguration)
+            .WithTeams(Teams.Ally);
+
+        SetCheckLimits(_shipBuilder);
+        SetInput(_shipBuilder);
     }
 
-    private CheckLimits GetCheckLimits()
+    public void SpawnUserShip()
+    {
+        _shipBuilder.Build();
+    }
+
+    private void SetCheckLimits(ShipBuilder shipBuilder)
     {
         if (_useAI)
         {
-            return new InitialPositionCheckLimits(_shipMediator.transform, _maxDistance);
+            shipBuilder.WithCheckLimitsType(ShipBuilder.CheckLimitsTypes.InitialPosition);
+            return;
         }
 
-        return new ViewportCheckLimits(_shipMediator.transform, Camera.main, _minTreshold, _maxTreshold);
+        shipBuilder.WithCheckLimitsType(ShipBuilder.CheckLimitsTypes.Viewport);
     }
 
-    private IInput GetInput()
+    private void SetInput(ShipBuilder shipBuilder)
     {
         /*#if UNITY_EDITOR
                 return new JoystickIInputAdapter(_joystick);
@@ -50,17 +59,20 @@ public class ShipInstaller : MonoBehaviour
 
         if (_useAI)
         {
-            return new AIInputAdapter(_shipMediator);
+            shipBuilder.WithInputMode(ShipBuilder.InputMode.Ai);
+            return;
         }
 
         if (_useJoystick)
         {
-            return new JoystickIInputAdapter(_joystick, _joyButton);
+            shipBuilder.WithInputMode(ShipBuilder.InputMode.Joystick)
+                .WithJoysticks(_joystick, _joyButton);
+            return;
         }
             
         Destroy(_joystick.gameObject);
         Destroy(_joyButton.gameObject);
-        return new UnityInputAdapter();
+        shipBuilder.WithInputMode(ShipBuilder.InputMode.Unity);
 
     }
 }

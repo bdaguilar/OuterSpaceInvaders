@@ -3,28 +3,32 @@ using UnityEngine;
 
 public class MovementController : MonoBehaviour
 {
-    [SerializeField]
-    private float _speed = 10;
-
-    private Transform _myTransform;
+    private Vector2 _speed;
+    private Rigidbody2D _rigidbody2D;
     private CheckLimits _checkLimits;
     private IShip _ship;
 
-    public void Configure(IShip shipMediator, CheckLimits checkLimits)
+    private Vector2 _currentPosition;
+
+    public void Configure(IShip shipMediator, CheckLimits checkLimits, Vector2 speed)
     {
         _ship = shipMediator;
         _checkLimits = checkLimits;
+        _speed = speed;
     }
 
     private void Awake()
     {
-        _myTransform = transform;
+        _rigidbody2D = GetComponent<Rigidbody2D>();
+        _currentPosition = _rigidbody2D.position;
     }
 
     public void Move(Vector2 direction)
     {
-        _myTransform.Translate(direction * (_speed * Time.deltaTime));
-        _checkLimits.ClampFinalPosition();
+        _currentPosition += direction * (_speed * Time.deltaTime);
+        _currentPosition = _checkLimits.ClampFinalPosition(_currentPosition);
+        _rigidbody2D.MovePosition(_currentPosition);
+        
 
     }
 }

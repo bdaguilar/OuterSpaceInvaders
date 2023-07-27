@@ -19,7 +19,7 @@ public class ProjectilesConfiguration : ScriptableObject
         }
     }
 
-    public Projectile GetProjectile(string id)
+    public Projectile GetProjectileById(string id)
     {
         if(!_idToProjectilePrefab.TryGetValue(id, out var projectile))
         {

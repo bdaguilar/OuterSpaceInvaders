@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77fd362cbc54e4d09baa240a8ec69eec, type: 3}
   m_Name: GreenBullet
   m_EditorClassIdentifier: 
-  _value: 
+  _value: OrangeBullet

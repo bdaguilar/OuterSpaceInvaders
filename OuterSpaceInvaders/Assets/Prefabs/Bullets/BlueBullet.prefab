@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 2725962433645756477}
   - component: {fileID: 7371606758455991282}
   - component: {fileID: 552776729619483506}
-  m_Layer: 0
+  - component: {fileID: -2655845247606063001}
+  m_Layer: 8
   m_Name: BlueBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -117,10 +118,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _projectileId: {fileID: 11400000, guid: ac87900cb320d4c719e048cd3cb91a26, type: 2}
+  _bulletLifeSpan: 5
   _speed: 5
   _rigidbody2D: {fileID: 0}
-  _transform: {fileID: 0}
-  _bulletLifeSpan: 5
   _horizontalPosition:
     serializedVersion: 2
     m_Curve:
@@ -172,3 +172,19 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!70 &-2655845247606063001
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5718907395312102122}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.00000023499514, y: 0}
+  m_Size: {x: 2.0495787, y: 5.12}
+  m_Direction: 0
