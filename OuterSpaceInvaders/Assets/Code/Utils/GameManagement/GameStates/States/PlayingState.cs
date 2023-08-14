@@ -11,16 +11,16 @@ public class PlayingState : IGameState, IEventObserver
         _onStatedEndedCallback = onStatedEndedCallback;
         _aliveShips = 0;
         _allShipsSpawned = false;
-        EventQueue.Instance.Subscribe(EventIds.ShipDestroyed, this);
-        EventQueue.Instance.Subscribe(EventIds.ShipSpawned, this);
-        EventQueue.Instance.Subscribe(EventIds.AllShipsSpawned, this);
+        ServiceLocator.Instance.GetService<IEventQueue>().Subscribe(EventIds.ShipDestroyed, this);
+        ServiceLocator.Instance.GetService<IEventQueue>().Subscribe(EventIds.ShipSpawned, this);
+        ServiceLocator.Instance.GetService<IEventQueue>().Subscribe(EventIds.AllShipsSpawned, this);
     }
 
     public void Stop()
     {
-        EventQueue.Instance.Unsubscribe(EventIds.ShipDestroyed, this);
-        EventQueue.Instance.Unsubscribe(EventIds.ShipSpawned, this);
-        EventQueue.Instance.Unsubscribe(EventIds.AllShipsSpawned, this);
+        ServiceLocator.Instance.GetService<IEventQueue>().Unsubscribe(EventIds.ShipDestroyed, this);
+        ServiceLocator.Instance.GetService<IEventQueue>().Unsubscribe(EventIds.ShipSpawned, this);
+        ServiceLocator.Instance.GetService<IEventQueue>().Unsubscribe(EventIds.AllShipsSpawned, this);
     }
 
     public void Process(EventData eventData)

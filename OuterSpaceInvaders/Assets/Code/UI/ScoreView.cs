@@ -1,14 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class ScoreView : MonoBehaviour, IEventObserver
+public class ScoreView : MonoBehaviour, IEventObserver, IScoreSystem
 {
 	[SerializeField]
 	private Text _text;
 
     private int _currentScore;
-
-    public static ScoreView Instance { get; private set; }
 
     public int CurrentScore
     {
@@ -20,25 +18,14 @@ public class ScoreView : MonoBehaviour, IEventObserver
         }
     }
 
-    private void Awake()
-    {
-        if (Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        Instance = this;
-    }
-
     private void Start()
     {
-        EventQueue.Instance.Subscribe(EventIds.ShipDestroyed, this);
+        ServiceLocator.Instance.GetService<IEventQueue>().Subscribe(EventIds.ShipDestroyed, this);
     }
 
     private void OnDestroy()
     {
-        EventQueue.Instance.Unsubscribe(EventIds.ShipDestroyed, this);
+        ServiceLocator.Instance.GetService<IEventQueue>().Unsubscribe(EventIds.ShipDestroyed, this);
     }
 
     public void Reset()
@@ -57,7 +44,7 @@ public class ScoreView : MonoBehaviour, IEventObserver
         AddScore(shipDestroyedEventData.Team, shipDestroyedEventData.ScoreToAdd);
     }
 
-    private void AddScore(Teams team, int scoreToAdd)
+    public void AddScore(Teams team, int scoreToAdd)
     {
         if(team != Teams.Enemy)
         {

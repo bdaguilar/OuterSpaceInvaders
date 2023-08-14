@@ -1,20 +1,8 @@
 ﻿using UnityEngine;
 
-public class ScoreSystemMonobehaviour : MonoBehaviour
+public class ScoreSystemMonobehaviour : MonoBehaviour, IScoreSystem
 {
-    private static ScoreSystemMonobehaviour _instance;
     private int _currentScore;
-
-    public static ScoreSystemMonobehaviour Instance()
-    {
-        if(_instance == null)
-        {
-            GameObject gameObject = new GameObject();
-            _instance = gameObject.AddComponent<ScoreSystemMonobehaviour>();
-        }
-
-        return _instance;
-    }
 
     public int GetScore()
     {
@@ -24,6 +12,11 @@ public class ScoreSystemMonobehaviour : MonoBehaviour
     public void AddScore(Teams team, int scoreToAdd)
     {
         _currentScore += scoreToAdd;
+    }
+
+    public void Reset()
+    {
+        _currentScore = 0;
     }
 }
 

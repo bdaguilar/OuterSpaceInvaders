@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class GameStateController : MonoBehaviour
 {
-    [SerializeField]
-    private GameFacade _gameFacade;
-
     private IGameState _currentState;
 
     private Dictionary<GameStates, IGameState> _idToState;
@@ -16,8 +13,8 @@ public class GameStateController : MonoBehaviour
         _idToState = new Dictionary<GameStates, IGameState>
                     {
                         {GameStates.Playing, new PlayingState()},
-                        {GameStates.Victory, new VictoryState(_gameFacade)},
-                        {GameStates.GameOver, new GameOverState(_gameFacade)},
+                        {GameStates.Victory, new VictoryState()},
+                        {GameStates.GameOver, new GameOverState()},
                     };
     }
 

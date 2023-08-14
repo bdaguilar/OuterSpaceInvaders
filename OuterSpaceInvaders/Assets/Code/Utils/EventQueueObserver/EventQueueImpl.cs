@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class EventQueue : MonoBehaviour
+public class EventQueueImpl : MonoBehaviour, IEventQueue
 {
-    public static EventQueue Instance { get; private set; }
-
     private Queue<EventData> _currentEvents;
     private Queue<EventData> _nextEvents;
 
@@ -12,14 +10,6 @@ public class EventQueue : MonoBehaviour
 
     private void Awake()
     {
-        if(Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        Instance = this;
-
         _currentEvents = new Queue<EventData>();
         _nextEvents = new Queue<EventData>();
         _observers = new Dictionary<EventIds, List<IEventObserver>>();

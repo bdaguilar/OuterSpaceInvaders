@@ -1,18 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class GlobalInstaller : MonoBehaviour
+public class GlobalInstaller : GeneralInstaller
 {
-    // Start is called before the first frame update
-    void Start()
+    protected override void DoStart()
     {
-        
+        ServiceLocator.Instance.GetService<CommandQueue>().AddCommand(new LoadSceneCommand("MenuScene"));
     }
 
-    // Update is called once per frame
-    void Update()
+    protected override void DoInstalDependencies()
     {
-        
+        ServiceLocator.Instance.RegisterService<CommandQueue>(CommandQueue.Instance);
     }
 }

@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class ScreenFade : MonoBehaviour
+public class LoadingScreen : MonoBehaviour
 {
 	[SerializeField]
 	private Image _screenFadeImage;
 
-	public void Show()
+    public void Show()
 	{
 		_screenFadeImage.enabled = true;
 	}

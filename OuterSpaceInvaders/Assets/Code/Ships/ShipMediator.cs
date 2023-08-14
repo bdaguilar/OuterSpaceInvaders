@@ -32,14 +32,14 @@ public class ShipMediator : MonoBehaviour, IShip, IEventObserver
 
     private void Start()
     {
-        EventQueue.Instance.Subscribe(EventIds.GameOver, this);
-        EventQueue.Instance.Subscribe(EventIds.Victory, this);
+        ServiceLocator.Instance.GetService<IEventQueue>().Subscribe(EventIds.GameOver, this);
+        ServiceLocator.Instance.GetService<IEventQueue>().Subscribe(EventIds.Victory, this);
     }
 
     private void OnDestroy()
     {
-        EventQueue.Instance.Unsubscribe(EventIds.GameOver, this);
-        EventQueue.Instance.Unsubscribe(EventIds.Victory, this);
+        ServiceLocator.Instance.GetService<IEventQueue>().Unsubscribe(EventIds.GameOver, this);
+        ServiceLocator.Instance.GetService<IEventQueue>().Unsubscribe(EventIds.Victory, this);
     }
 
     public void Configure(ShipConfiguration shipConfiguration)
@@ -74,8 +74,7 @@ public class ShipMediator : MonoBehaviour, IShip, IEventObserver
         Destroy(gameObject);
 
         ShipDestroyedEventData shipDestroyedEventData = new ShipDestroyedEventData(0, _team, GetInstanceID());
-        EventQueue.Instance.EnqueueEvent(shipDestroyedEventData);
-        
+        ServiceLocator.Instance.GetService<IEventQueue>().EnqueueEvent(shipDestroyedEventData);
     }
 
     private void TryShoot()
@@ -103,7 +102,7 @@ public class ShipMediator : MonoBehaviour, IShip, IEventObserver
             Destroy(gameObject);
 
             ShipDestroyedEventData shipDestroyedEventData = new ShipDestroyedEventData(_score, _team, GetInstanceID());
-            EventQueue.Instance.EnqueueEvent(shipDestroyedEventData);
+            ServiceLocator.Instance.GetService<IEventQueue>().EnqueueEvent(shipDestroyedEventData);
         }
     }
 
