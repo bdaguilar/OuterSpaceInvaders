@@ -1,8 +1,7 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System.IO;
+using System;
 
 public class GameOverView : MonoBehaviour, IEventObserver
 {
@@ -11,27 +10,28 @@ public class GameOverView : MonoBehaviour, IEventObserver
 	[SerializeField]
 	private Button _restartButton;
     [SerializeField]
-    private GameFacade _gameFacade;
+    private Button _returnToMenuButton;
 
     private void Awake()
     {
         _restartButton.onClick.AddListener(RestartGame);
+        _returnToMenuButton.onClick.AddListener(OnReturnToMenuPressed);
     }
 
     private void Start()
     {
         gameObject.SetActive(false);
-        EventQueue.Instance.Subscribe(EventIds.GameOver, this);
+        ServiceLocator.Instance.GetService<IEventQueue>().Subscribe(EventIds.GameOver, this);
     }
 
     private void OnDestroy()
     {
-        EventQueue.Instance.Unsubscribe(EventIds.GameOver, this);
+        ServiceLocator.Instance.GetService<IEventQueue>().Unsubscribe(EventIds.GameOver, this);
     }
 
     public void RestartGame()
     {
-        _gameFacade.StartBattle();
+        ServiceLocator.Instance.GetService<IGameFacade>().StartBattle();
         gameObject.SetActive(false);
     }
 
@@ -47,7 +47,13 @@ public class GameOverView : MonoBehaviour, IEventObserver
 
     private void ProcessShipGameOver()
     {
-        _scoreText.SetText(ScoreView.Instance.CurrentScore.ToString());
+        ScoreView scoreView = ServiceLocator.Instance.GetService<IScoreSystem>() as ScoreView;
+        _scoreText.SetText(scoreView.CurrentScore.ToString());
         gameObject.SetActive(true);
+    }
+
+    private void OnReturnToMenuPressed()
+    {
+        ServiceLocator.Instance.GetService<CommandQueue>().AddCommand(new LoadSceneCommand("MenuScene"));
     }
 }

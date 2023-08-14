@@ -1,18 +1,11 @@
 ﻿using System;
 
-public class ScoreSystem
+public class ScoreSystem : IScoreSystem
 {
-	private static ScoreSystem _instance;
 
     private int _currentScore;
 
-    public static ScoreSystem Instance => _instance ?? (_instance = new ScoreSystem());
     public int Score => _currentScore;
-
-    private ScoreSystem()
-	{
-
-	}
 
 	public int GetScore()
 	{
