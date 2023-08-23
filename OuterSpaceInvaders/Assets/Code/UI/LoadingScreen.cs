@@ -3,16 +3,13 @@ using UnityEngine.UI;
 
 public class LoadingScreen : MonoBehaviour
 {
-	[SerializeField]
-	private Image _screenFadeImage;
-
     public void Show()
 	{
-		_screenFadeImage.enabled = true;
-	}
+		gameObject.SetActive(true);
+    }
 
 	public void Hide()
 	{
-		_screenFadeImage.enabled = false;
-	}
+        gameObject.SetActive(false);
+    }
 }

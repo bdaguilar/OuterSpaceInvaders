@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -19,6 +19,8 @@ public abstract class Projectile : MonoBehaviour, IDamageable
     public string Id => _projectileId.Value;
 
     public Teams Team { get; private set; }
+
+    public Action<Projectile> OnDestroy;
 
     public void Configure(Teams team)
     {
@@ -61,6 +63,7 @@ public abstract class Projectile : MonoBehaviour, IDamageable
     private void DestroyProjectile()
     {
         DoDestroyIn();
+        OnDestroy?.Invoke(this);
         Destroy(gameObject);
     }
 

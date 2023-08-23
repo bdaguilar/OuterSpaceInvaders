@@ -4,25 +4,18 @@ using UnityEngine.UI;
 
 public class Menu : MonoBehaviour
 {
-	[SerializeField]
-	private Button _startBattleButton;
-	[SerializeField]
-	private Button _stopBattleButton;
+    [SerializeField]
+    private Button _pauseBattleButton;
 
     private void Awake()
     {
-        _startBattleButton.onClick.AddListener(StartBattle);
-        _stopBattleButton.onClick.AddListener(StopBattle);
+        _pauseBattleButton.onClick.AddListener(PauseBattle);
     }
 
-    private void StopBattle()
+    private void PauseBattle()
     {
-        ServiceLocator.Instance.GetService<IGameFacade>().StopBattle();
-    }
-
-    private void StartBattle()
-    {
-        ServiceLocator.Instance.GetService<IGameFacade>().StartBattle();
+        //ServiceLocator.Instance.GetService<IGameFacade>().PauseBattle();
+        //gameObject.SetActive(false);
     }
 }
 

@@ -14,6 +14,8 @@ public class ShipMediator : MonoBehaviour, IShip, IEventObserver
     private HealthController _healthController;
     [SerializeField]
     private ShipId _shipId;
+    [SerializeField]
+    private Vector3 _originalPosition;
 
     private IInput _inputController;
     private ICheckDestroyLimits _checkDestroyLimits;
@@ -34,12 +36,14 @@ public class ShipMediator : MonoBehaviour, IShip, IEventObserver
     {
         ServiceLocator.Instance.GetService<IEventQueue>().Subscribe(EventIds.GameOver, this);
         ServiceLocator.Instance.GetService<IEventQueue>().Subscribe(EventIds.Victory, this);
+        ServiceLocator.Instance.GetService<IEventQueue>().Subscribe(EventIds.RestartGame, this);
     }
 
     private void OnDestroy()
     {
         ServiceLocator.Instance.GetService<IEventQueue>().Unsubscribe(EventIds.GameOver, this);
         ServiceLocator.Instance.GetService<IEventQueue>().Unsubscribe(EventIds.Victory, this);
+        ServiceLocator.Instance.GetService<IEventQueue>().Unsubscribe(EventIds.RestartGame, this);
     }
 
     public void Configure(ShipConfiguration shipConfiguration)
@@ -108,10 +112,14 @@ public class ShipMediator : MonoBehaviour, IShip, IEventObserver
 
     public void Process(EventData eventData)
     {
-        if (eventData.EventId != EventIds.GameOver && eventData.EventId != EventIds.Victory)
+        if (eventData.EventId != EventIds.GameOver &&
+            eventData.EventId != EventIds.Victory &&
+            eventData.EventId != EventIds.RestartGame)
         {
             return;
         }
+
+        _weaponController.Restart();
 
         Destroy(gameObject);
     }
