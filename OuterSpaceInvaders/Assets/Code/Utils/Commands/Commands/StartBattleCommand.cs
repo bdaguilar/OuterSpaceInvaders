@@ -11,6 +11,7 @@ public class StartBattleCommand : ICommand
         ServiceLocator.Instance.GetService<IScoreSystem>().Reset();
         ServiceLocator.Instance.GetService<EnemySpawner>().StartSpawn();
         ServiceLocator.Instance.GetService<ShipInstaller>().SpawnUserShip();
+        ServiceLocator.Instance.GetService<ScoreView>().Reset();
 
         await new HideScreenFadeCommand().Execute();
     }

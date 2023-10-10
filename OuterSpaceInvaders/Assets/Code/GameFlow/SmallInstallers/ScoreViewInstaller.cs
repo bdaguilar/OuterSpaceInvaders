@@ -7,12 +7,12 @@ public class ScoreViewInstaller : Installer
 
     public override void Install(ServiceLocator serviceLocator)
     {
-        serviceLocator.RegisterService<IScoreSystem>(_scoreView);
+        serviceLocator.RegisterService<ScoreView>(_scoreView);
     }
 
     private void OnDestroy()
     {
-        ServiceLocator.Instance.UnregisterService<IScoreSystem>();
+        ServiceLocator.Instance.UnregisterService<ScoreView>();
     }
 }
 

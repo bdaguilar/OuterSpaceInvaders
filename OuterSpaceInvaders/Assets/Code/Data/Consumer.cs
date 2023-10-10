@@ -14,7 +14,7 @@ public class Consumer : MonoBehaviour
         //_fileDataStoreAdapter = new FileDataStoreAdapter();
         Data data = new Data("Test", 123);
         //_fileDataStoreAdapter.SetData(data, "TestDataLog");
-        _playerPrefsDataStoreAdapter = new PlayerPrefsDataStoreAdapter();
+        //_playerPrefsDataStoreAdapter = new PlayerPrefsDataStoreAdapter();
         _playerPrefsDataStoreAdapter.SetData(data, "TestData");
     }
 

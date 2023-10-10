@@ -25,8 +25,8 @@ public class GameOverView : BaseInGameView
 
     public override void Show()
     {
-        ScoreView scoreView = ServiceLocator.Instance.GetService<IScoreSystem>() as ScoreView;
-        _scoreText.SetText(scoreView.CurrentScore.ToString());
+        IScoreSystem scoreSystem = ServiceLocator.Instance.GetService<IScoreSystem>();
+        _scoreText.SetText(scoreSystem.CurrentScore.ToString());
         gameObject.SetActive(true);
     }
 }
