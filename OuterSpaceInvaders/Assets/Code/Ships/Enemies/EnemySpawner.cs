@@ -18,7 +18,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void Awake()
     {
-		_shipFactory = new ShipFactory(Instantiate(_shipsConfiguration));
+		_shipFactory = ServiceLocator.Instance.GetService<ShipFactory>();
     }
 
     public void StartSpawn()

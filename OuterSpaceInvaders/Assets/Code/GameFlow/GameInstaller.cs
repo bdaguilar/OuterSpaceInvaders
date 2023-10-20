@@ -18,10 +18,27 @@ public class GameInstaller : GeneralInstaller
     private GameOverView _gameOverView;
     [SerializeField]
     private GameVictoryView _gameVictoryView;
+    [SerializeField]
+    private ShipsConfiguration _shipsConfiguration;
+    [SerializeField]
+    private ProjectilesConfiguration _projectilesConfiguration;
 
     protected override void DoInstalDependencies()
     {
+        InstallShipFactory();
+        InstallProjectilesFactory();
+    }
 
+    private void InstallProjectilesFactory()
+    {
+        ProjectileFactory _projectileFactory = new ProjectileFactory(Instantiate(_projectilesConfiguration));
+        ServiceLocator.Instance.RegisterService(_projectileFactory);
+    }
+
+    private void InstallShipFactory()
+    {
+        ShipFactory shipFactory = new ShipFactory(Instantiate(_shipsConfiguration));
+        ServiceLocator.Instance.RegisterService(shipFactory);
     }
 
     protected override void DoStart()
@@ -46,5 +63,7 @@ public class GameInstaller : GeneralInstaller
         ServiceLocator.Instance.UnregisterService<PauseView>();
         ServiceLocator.Instance.UnregisterService<GameOverView>();
         ServiceLocator.Instance.UnregisterService<GameVictoryView>();
+        ServiceLocator.Instance.UnregisterService<ShipFactory>();
+        ServiceLocator.Instance.UnregisterService<ProjectileFactory>();
     }
 }

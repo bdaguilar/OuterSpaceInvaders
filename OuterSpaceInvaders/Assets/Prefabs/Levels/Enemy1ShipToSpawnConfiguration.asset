@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Enemy1ShipToSpawnConfiguration
   m_EditorClassIdentifier: 
   _shipId: {fileID: 11400000, guid: 99cc967c5372d4162a1604b1aba70f8f, type: 2}
-  _defaultProjectileId: {fileID: 11400000, guid: ad6d5cdcd90864a08b27ae175f8bf746,
+  _defaultProjectileId: {fileID: 11400000, guid: 734ee743220a44bd0a0a62a05fef19a0,
     type: 2}
   _speed: {x: 3, y: 1}
   _fireRate: 0.3

@@ -22,7 +22,7 @@ public class WeaponController : MonoBehaviour
 
     private void Awake()
     {
-        _projectileFactory = new ProjectileFactory(Instantiate(_projectilesConfiguration));
+        _projectileFactory = ServiceLocator.Instance.GetService<ProjectileFactory>();
         _aliveProjectiles = new List<Projectile>();
     }
 

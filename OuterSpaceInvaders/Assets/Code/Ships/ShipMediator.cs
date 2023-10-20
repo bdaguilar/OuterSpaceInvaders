@@ -15,7 +15,7 @@ public class ShipMediator : MonoBehaviour, IShip, IEventObserver
     [SerializeField]
     private ShipId _shipId;
     [SerializeField]
-    private Vector3 _originalPosition;
+    private GameObject _explotionAnimation;
 
     private IInput _inputController;
     private ICheckDestroyLimits _checkDestroyLimits;
@@ -103,6 +103,7 @@ public class ShipMediator : MonoBehaviour, IShip, IEventObserver
     {
         if(isDeath)
         {
+            Instantiate(_explotionAnimation, _transform.position, Quaternion.identity);
             Destroy(gameObject);
 
             ShipDestroyedEventData shipDestroyedEventData = new ShipDestroyedEventData(_score, _team, GetInstanceID());
