@@ -4,7 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(WeaponController))]
 [RequireComponent(typeof(MovementController))]
 [RequireComponent(typeof(HealthController))]
-public class ShipMediator : MonoBehaviour, IShip, IEventObserver
+public class ShipMediator : RecyclableObject, IShip, IEventObserver
 {
     [SerializeField]
     private WeaponController _weaponController;
@@ -32,14 +32,14 @@ public class ShipMediator : MonoBehaviour, IShip, IEventObserver
         _transform = transform;
     }
 
-    private void Start()
+    internal override void Init()
     {
         ServiceLocator.Instance.GetService<IEventQueue>().Subscribe(EventIds.GameOver, this);
         ServiceLocator.Instance.GetService<IEventQueue>().Subscribe(EventIds.Victory, this);
         ServiceLocator.Instance.GetService<IEventQueue>().Subscribe(EventIds.RestartGame, this);
     }
 
-    private void OnDestroy()
+    internal override void Release()
     {
         ServiceLocator.Instance.GetService<IEventQueue>().Unsubscribe(EventIds.GameOver, this);
         ServiceLocator.Instance.GetService<IEventQueue>().Unsubscribe(EventIds.Victory, this);
@@ -75,7 +75,7 @@ public class ShipMediator : MonoBehaviour, IShip, IEventObserver
             return;
         }
 
-        Destroy(gameObject);
+        Recycle();
 
         ShipDestroyedEventData shipDestroyedEventData = new ShipDestroyedEventData(0, _team, GetInstanceID());
         ServiceLocator.Instance.GetService<IEventQueue>().EnqueueEvent(shipDestroyedEventData);
@@ -104,7 +104,7 @@ public class ShipMediator : MonoBehaviour, IShip, IEventObserver
         if(isDeath)
         {
             Instantiate(_explotionAnimation, _transform.position, Quaternion.identity);
-            Destroy(gameObject);
+            Recycle();
 
             ShipDestroyedEventData shipDestroyedEventData = new ShipDestroyedEventData(_score, _team, GetInstanceID());
             ServiceLocator.Instance.GetService<IEventQueue>().EnqueueEvent(shipDestroyedEventData);
@@ -122,7 +122,7 @@ public class ShipMediator : MonoBehaviour, IShip, IEventObserver
 
         _weaponController.Restart();
 
-        Destroy(gameObject);
+        Recycle();
     }
 }
 

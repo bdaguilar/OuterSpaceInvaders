@@ -51,21 +51,21 @@ public class WeaponController : MonoBehaviour
     {
         _cooldownSecondsToBeAbleToShoot = _fireRateInSeconds;
         Projectile projectile = _projectileFactory.Create(_projectileSpawnPoint, _activeProjjectileId, _team);
-        projectile.OnDestroy += OnDestroyProjectile;
+        projectile.OnRecycle += OnDestroyProjectile;
         _aliveProjectiles.Add(projectile);
     }
 
     private void OnDestroyProjectile(Projectile projectile)
     {
         _aliveProjectiles.Remove(projectile);
-        projectile.OnDestroy -= OnDestroyProjectile;
+        projectile.OnRecycle -= OnDestroyProjectile;
     }
 
     internal void Restart()
     {
         foreach(Projectile projectile in _aliveProjectiles)
         {
-            Destroy(projectile.gameObject);
+            projectile.Recycle();
         }
 
         _aliveProjectiles.Clear();

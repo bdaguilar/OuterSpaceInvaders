@@ -25,8 +25,8 @@ public class GameInstaller : GeneralInstaller
 
     protected override void DoInstalDependencies()
     {
-        InstallShipFactory();
         InstallProjectilesFactory();
+        InstallShipFactory();
     }
 
     private void InstallProjectilesFactory()

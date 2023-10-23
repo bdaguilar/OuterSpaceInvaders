@@ -15,12 +15,12 @@ public class MovementController : MonoBehaviour
         _ship = shipMediator;
         _checkLimits = checkLimits;
         _speed = speed;
+        _currentPosition = _rigidbody2D.position;
     }
 
     private void Awake()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
-        _currentPosition = _rigidbody2D.position;
     }
 
     public void Move(Vector2 direction)
@@ -28,8 +28,6 @@ public class MovementController : MonoBehaviour
         _currentPosition += direction * (_speed * Time.deltaTime);
         _currentPosition = _checkLimits.ClampFinalPosition(_currentPosition);
         _rigidbody2D.MovePosition(_currentPosition);
-        
-
     }
 }
 

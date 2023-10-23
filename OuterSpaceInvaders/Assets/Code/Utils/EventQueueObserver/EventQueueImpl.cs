@@ -3,13 +3,28 @@ using UnityEngine;
 
 public class EventQueueImpl : MonoBehaviour, IEventQueue
 {
+    private class RemoveData
+    {
+        public EventIds EventId;
+        public IEventObserver EventObserver;
+
+        public RemoveData(EventIds eventId, IEventObserver eventObserver)
+        {
+            EventId = eventId;
+            EventObserver = eventObserver;
+        }
+    }
+
+    private List<RemoveData> _observersToUnsubscribe;
     private Queue<EventData> _currentEvents;
     private Queue<EventData> _nextEvents;
 
 	private Dictionary<EventIds, List<IEventObserver>> _observers;
+    private bool _isProccessingEvents;
 
     private void Awake()
     {
+        _observersToUnsubscribe = new List<RemoveData>();
         _currentEvents = new Queue<EventData>();
         _nextEvents = new Queue<EventData>();
         _observers = new Dictionary<EventIds, List<IEventObserver>>();
@@ -27,6 +42,18 @@ public class EventQueueImpl : MonoBehaviour, IEventQueue
     }
 
     public void Unsubscribe(EventIds eventId, IEventObserver eventObserver)
+    {
+        if (_isProccessingEvents)
+        {
+            RemoveData removeData = new RemoveData(eventId, eventObserver);
+            _observersToUnsubscribe.Add(removeData);
+            return;
+        }
+
+        DoUnsubscribe(eventId, eventObserver);
+    }
+
+    private void DoUnsubscribe(EventIds eventId, IEventObserver eventObserver)
     {
         _observers[eventId].Remove(eventObserver);
     }
@@ -53,21 +80,27 @@ public class EventQueueImpl : MonoBehaviour, IEventQueue
         }
 
         _currentEvents.Clear();
-
-        /*if(_nextEvents.Count > 0)
-        {
-            ProcessEvents();
-        }*/
     }
 
     private void ProcessEvent(EventData eventData)
-	{
-		if(_observers.TryGetValue(eventData.EventId, out var eventObservers))
+    {
+        _isProccessingEvents = true;
+        if (_observers.TryGetValue(eventData.EventId, out var eventObservers))
         {
-            foreach(IEventObserver eventObserver in eventObservers)
+            foreach (IEventObserver eventObserver in eventObservers)
             {
                 eventObserver.Process(eventData);
             }
         }
-	}
+        _isProccessingEvents = false;
+        UnsubscribePendingObservers();
+    }
+
+    private void UnsubscribePendingObservers()
+    {
+        foreach (RemoveData removeData in _observersToUnsubscribe)
+        {
+            DoUnsubscribe(removeData.EventId, removeData.EventObserver);
+        }
+    }
 }

@@ -17,8 +17,9 @@ public class ShipBuilder
         Viewport
     }
 
-    private ShipMediator _prefab;
-	private Vector3 _position = Vector3.zero;
+    private ObjectPool _objectPool;
+
+    private Vector3 _position = Vector3.zero;
 	private Quaternion _rotation = Quaternion.identity;
     private IInput _input;
     private CheckLimits _checkLimits;
@@ -30,11 +31,11 @@ public class ShipBuilder
     private Teams _team;
     private ICheckDestroyLimits _checkDestroyLimits = new DoNotCheckDestroyLimitsStrategy();
 
-    public ShipBuilder FromPrefab(ShipMediator prefab)
-	{
-		_prefab = prefab;
-		return this;
-	}
+    public ShipBuilder FromObjectPool(ObjectPool objectPool)
+    {
+        _objectPool = objectPool;
+        return this;
+    }
 
     public ShipBuilder WithPosition(Vector3 position)
     {
@@ -99,7 +100,7 @@ public class ShipBuilder
 
     public ShipMediator Build()
 	{
-		ShipMediator ship = UnityEngine.Object.Instantiate(_prefab, _position, _rotation);
+        ShipMediator ship = _objectPool.Spawn<ShipMediator>(_position, _rotation);
         ShipConfiguration shipConfiguration = new ShipConfiguration(GetInput(ship),
                                                                     GetCheckLimits(ship),
                                                                     _checkDestroyLimits,
