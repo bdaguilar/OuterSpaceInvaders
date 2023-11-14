@@ -158,6 +158,7 @@ MonoBehaviour:
   _gameStateController: {fileID: 957428307}
   _screenFade: {fileID: 7382055639387259670}
   _menu: {fileID: 0}
+  _inGameMenuView: {fileID: 1996894517}
   _pauseMenu: {fileID: 1024722660}
   _gameOverView: {fileID: 1116903489}
   _gameVictoryView: {fileID: 1507044041}

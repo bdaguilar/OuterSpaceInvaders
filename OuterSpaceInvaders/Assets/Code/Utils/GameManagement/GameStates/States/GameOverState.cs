@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 public class GameOverState : IGameState
 {
@@ -12,6 +13,7 @@ public class GameOverState : IGameState
     public void Start(Action<GameStates> onStateEndedCallback)
     {
         ServiceLocator.Instance.GetService<CommandQueue>().AddCommand(_stopBattleCommand);
+        ServiceLocator.Instance.GetService<CommandQueue>().AddCommand(new PauseGameCommand());
         ServiceLocator.Instance.GetService<IEventQueue>().EnqueueEvent(new EventData(EventIds.GameOver));
     }
 

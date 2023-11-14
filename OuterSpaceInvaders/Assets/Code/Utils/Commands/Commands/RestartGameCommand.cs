@@ -8,7 +8,7 @@ public class RestartGameCommand : ICommand
         ServiceLocator.Instance.GetService<IEventQueue>().EnqueueEvent(new EventData(EventIds.RestartGame));
         await new ResumeGameCommand().Execute();
         await new StopGameCommand().Execute();
-        await new StartBattleCommand().Execute();
+        await new StartBattleFromMenuCommand().Execute();
     }
 }
 

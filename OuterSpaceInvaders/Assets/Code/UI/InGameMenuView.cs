@@ -46,6 +46,7 @@ public class InGameMenuView : MonoBehaviour, IEventObserver, IInGameMenuMediator
     public void OnBackToMenuPressed()
     {
         _commandQueue.AddCommand(new LoadSceneCommand("MenuScene"));
+        _commandQueue.AddCommand(new ResumeGameCommand());
         HideAllViews();
     }
 

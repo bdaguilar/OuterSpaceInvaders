@@ -3,9 +3,10 @@ using System.Threading.Tasks;
 
 public class StopGameCommand : ICommand
 {
-    public Task Execute()
+    public async Task Execute()
     {
         ServiceLocator.Instance.GetService<EnemySpawner>().StopAndReset();
-        return Task.CompletedTask;
+        ServiceLocator.Instance.GetService<EnemySpawner>().Restart();
+        await Task.Yield();
     }
 }

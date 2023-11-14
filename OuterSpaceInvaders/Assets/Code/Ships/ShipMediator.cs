@@ -23,6 +23,9 @@ public class ShipMediator : RecyclableObject, IShip, IEventObserver
     private Teams _team;
     private int _score;
     private Transform _transform;
+    private int _amountToSpawn;
+
+    public Action<ShipMediator> OnRecycle;
 
     private void Awake()
     {
@@ -75,7 +78,7 @@ public class ShipMediator : RecyclableObject, IShip, IEventObserver
             return;
         }
 
-        Recycle();
+        RecycleShip();
 
         ShipDestroyedEventData shipDestroyedEventData = new ShipDestroyedEventData(0, _team, GetInstanceID());
         ServiceLocator.Instance.GetService<IEventQueue>().EnqueueEvent(shipDestroyedEventData);
@@ -104,7 +107,7 @@ public class ShipMediator : RecyclableObject, IShip, IEventObserver
         if(isDeath)
         {
             Instantiate(_explotionAnimation, _transform.position, Quaternion.identity);
-            Recycle();
+            RecycleShip();
 
             ShipDestroyedEventData shipDestroyedEventData = new ShipDestroyedEventData(_score, _team, GetInstanceID());
             ServiceLocator.Instance.GetService<IEventQueue>().EnqueueEvent(shipDestroyedEventData);
@@ -122,6 +125,12 @@ public class ShipMediator : RecyclableObject, IShip, IEventObserver
 
         _weaponController.Restart();
 
+        RecycleShip();
+    }
+
+    private void RecycleShip()
+    {
+        OnRecycle?.Invoke(this);
         Recycle();
     }
 }
