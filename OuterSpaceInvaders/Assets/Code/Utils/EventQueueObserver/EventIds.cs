@@ -6,5 +6,6 @@ public enum EventIds
     ShipSpawned,
     AllShipsSpawned,
     GameOver,
-    Victory
+    Victory,
+    RestartGame
 } 

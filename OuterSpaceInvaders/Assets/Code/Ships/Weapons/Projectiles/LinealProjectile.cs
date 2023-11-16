@@ -12,10 +12,6 @@ public class LinealProjectile : Projectile
     protected override void DoMove()
     {
     }
-
-    protected override void DoDestroyIn()
-    {
-    }
 }
 
 

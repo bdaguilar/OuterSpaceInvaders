@@ -7,8 +7,9 @@ public class ShipsConfiguration : ScriptableObject
 {
     [SerializeField]
     private ShipMediator[] _shipsIdPrefabs;
-
     private Dictionary<string, ShipMediator> _idShipPrefab;
+
+    public ShipMediator[] ShipPrefabs => _shipsIdPrefabs;
 
     private void Awake()
     {

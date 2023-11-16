@@ -4,7 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(WeaponController))]
 [RequireComponent(typeof(MovementController))]
 [RequireComponent(typeof(HealthController))]
-public class ShipMediator : MonoBehaviour, IShip, IEventObserver
+public class ShipMediator : RecyclableObject, IShip, IEventObserver
 {
     [SerializeField]
     private WeaponController _weaponController;
@@ -14,6 +14,8 @@ public class ShipMediator : MonoBehaviour, IShip, IEventObserver
     private HealthController _healthController;
     [SerializeField]
     private ShipId _shipId;
+    [SerializeField]
+    private GameObject _explotionAnimation;
 
     private IInput _inputController;
     private ICheckDestroyLimits _checkDestroyLimits;
@@ -21,6 +23,9 @@ public class ShipMediator : MonoBehaviour, IShip, IEventObserver
     private Teams _team;
     private int _score;
     private Transform _transform;
+    private int _amountToSpawn;
+
+    public Action<ShipMediator> OnRecycle;
 
     private void Awake()
     {
@@ -30,16 +35,18 @@ public class ShipMediator : MonoBehaviour, IShip, IEventObserver
         _transform = transform;
     }
 
-    private void Start()
+    internal override void Init()
     {
         ServiceLocator.Instance.GetService<IEventQueue>().Subscribe(EventIds.GameOver, this);
         ServiceLocator.Instance.GetService<IEventQueue>().Subscribe(EventIds.Victory, this);
+        ServiceLocator.Instance.GetService<IEventQueue>().Subscribe(EventIds.RestartGame, this);
     }
 
-    private void OnDestroy()
+    internal override void Release()
     {
         ServiceLocator.Instance.GetService<IEventQueue>().Unsubscribe(EventIds.GameOver, this);
         ServiceLocator.Instance.GetService<IEventQueue>().Unsubscribe(EventIds.Victory, this);
+        ServiceLocator.Instance.GetService<IEventQueue>().Unsubscribe(EventIds.RestartGame, this);
     }
 
     public void Configure(ShipConfiguration shipConfiguration)
@@ -71,7 +78,7 @@ public class ShipMediator : MonoBehaviour, IShip, IEventObserver
             return;
         }
 
-        Destroy(gameObject);
+        RecycleShip();
 
         ShipDestroyedEventData shipDestroyedEventData = new ShipDestroyedEventData(0, _team, GetInstanceID());
         ServiceLocator.Instance.GetService<IEventQueue>().EnqueueEvent(shipDestroyedEventData);
@@ -99,7 +106,8 @@ public class ShipMediator : MonoBehaviour, IShip, IEventObserver
     {
         if(isDeath)
         {
-            Destroy(gameObject);
+            Instantiate(_explotionAnimation, _transform.position, Quaternion.identity);
+            RecycleShip();
 
             ShipDestroyedEventData shipDestroyedEventData = new ShipDestroyedEventData(_score, _team, GetInstanceID());
             ServiceLocator.Instance.GetService<IEventQueue>().EnqueueEvent(shipDestroyedEventData);
@@ -108,12 +116,22 @@ public class ShipMediator : MonoBehaviour, IShip, IEventObserver
 
     public void Process(EventData eventData)
     {
-        if (eventData.EventId != EventIds.GameOver && eventData.EventId != EventIds.Victory)
+        if (eventData.EventId != EventIds.GameOver &&
+            eventData.EventId != EventIds.Victory &&
+            eventData.EventId != EventIds.RestartGame)
         {
             return;
         }
 
-        Destroy(gameObject);
+        _weaponController.Restart();
+
+        RecycleShip();
+    }
+
+    private void RecycleShip()
+    {
+        OnRecycle?.Invoke(this);
+        Recycle();
     }
 }
 

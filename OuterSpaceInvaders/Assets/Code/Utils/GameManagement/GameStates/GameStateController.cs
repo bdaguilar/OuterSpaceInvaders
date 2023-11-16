@@ -10,11 +10,12 @@ public class GameStateController : MonoBehaviour
 
     private void Awake()
     {
+        ICommand stopBattleCommand = new StopGameCommand();
         _idToState = new Dictionary<GameStates, IGameState>
                     {
                         {GameStates.Playing, new PlayingState()},
-                        {GameStates.Victory, new VictoryState()},
-                        {GameStates.GameOver, new GameOverState()},
+                        {GameStates.Victory, new VictoryState(stopBattleCommand)},
+                        {GameStates.GameOver, new GameOverState(stopBattleCommand)},
                     };
     }
 

@@ -15,10 +15,12 @@ public class EnemySpawner : MonoBehaviour
 	private float _currentTimeInSeconds;
 	private int _currentConfigurationIndex;
     private bool _canSpawn = false;
+	private List<ShipMediator> _spawnedEnemies;
 
     private void Awake()
     {
-		_shipFactory = new ShipFactory(Instantiate(_shipsConfiguration));
+		_shipFactory = ServiceLocator.Instance.GetService<ShipFactory>();
+		_spawnedEnemies = new List<ShipMediator>();
     }
 
     public void StartSpawn()
@@ -69,7 +71,7 @@ public class EnemySpawner : MonoBehaviour
 			ShipToSpawnConfiguration shipToSpawnConfiguration = spawnConfiguration.ShipToSpawnConfigurations[i];
 			Transform spawnPosition = _spawnPositions[i % _spawnPositions.Length];
             ShipBuilder shipBuilder =_shipFactory.Create(shipToSpawnConfiguration.ShipId.Value);
-			shipBuilder.WithInputMode(ShipBuilder.InputMode.Ai)
+			ShipMediator ship = shipBuilder.WithInputMode(ShipBuilder.InputMode.Ai)
 				.WithPosition(spawnPosition.position)
 				.WithRotation(spawnPosition.rotation)
 				.WithCheckLimitsType(ShipBuilder.CheckLimitsTypes.InitialPosition)
@@ -77,9 +79,26 @@ public class EnemySpawner : MonoBehaviour
 				.WithTeams(Teams.Enemy)
 				.WithCheckDestroyLimits()
 				.Build();
+            ship.OnRecycle += OnDestroyShip;
+            _spawnedEnemies.Add(ship);
             ServiceLocator.Instance.GetService<IEventQueue>().EnqueueEvent(new EventData(EventIds.ShipSpawned));
         }
-        
+    }
+
+    private void OnDestroyShip(ShipMediator ship)
+    {
+        _spawnedEnemies.Remove(ship);
+        ship.OnRecycle -= OnDestroyShip;
+    }
+
+    public void Restart()
+	{
+        foreach (ShipMediator ship in _spawnedEnemies)
+        {
+            ship.Recycle();
+        }
+
+        _spawnedEnemies.Clear();
     }
 }
 

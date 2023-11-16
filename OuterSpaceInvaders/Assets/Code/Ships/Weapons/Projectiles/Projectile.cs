@@ -1,9 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public abstract class Projectile : MonoBehaviour, IDamageable
+public abstract class Projectile : RecyclableObject, IDamageable
 {
     [SerializeField]
     private ProjectileId _projectileId;
@@ -20,17 +20,27 @@ public abstract class Projectile : MonoBehaviour, IDamageable
 
     public Teams Team { get; private set; }
 
+    public Action<Projectile> OnRecycle;
+
     public void Configure(Teams team)
     {
         Team = team;
     }
 
-    private void Start()
+    internal override void Init()
+    {
+        DoStart();
+        StartCoroutine(RecycleIn(_bulletLifeSpan));
+    }
+
+    internal override void Release()
+    {
+    }
+
+    private void Awake()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _transform = transform;
-        DoStart();
-        StartCoroutine(DestroyIn(_bulletLifeSpan));
     }
 
     protected abstract void DoStart();
@@ -52,22 +62,20 @@ public abstract class Projectile : MonoBehaviour, IDamageable
         damageable.AddDamage(1);
     }
 
-    private IEnumerator DestroyIn(float seconds)
+    private IEnumerator RecycleIn(float seconds)
     {
         yield return new WaitForSeconds(seconds);
-        DestroyProjectile();
+        RecycleProjectile();
     }
 
-    private void DestroyProjectile()
+    private void RecycleProjectile()
     {
-        DoDestroyIn();
-        Destroy(gameObject);
+        OnRecycle?.Invoke(this);
+        Recycle();
     }
-
-    protected abstract void DoDestroyIn();
 
     public void AddDamage(int amout)
     {
-        DestroyProjectile();
+        RecycleProjectile();
     }
 }

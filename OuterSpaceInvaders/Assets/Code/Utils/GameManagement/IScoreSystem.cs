@@ -1,6 +1,7 @@
 ﻿public interface IScoreSystem
 {
-    void AddScore(Teams team, int scoreToAdd);
+    int[] GetBestScores();
     void Reset();
+    int CurrentScore { get; }
 }
 

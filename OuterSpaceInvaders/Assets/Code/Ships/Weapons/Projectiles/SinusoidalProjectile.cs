@@ -25,10 +25,6 @@ public class SinusoidalProjectile : Projectile
 
         _currentTime += Time.deltaTime;
     }
-
-    protected override void DoDestroyIn()
-    {
-    }
 }
 
 

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67c08b496a3204a7799d3b01dcefc137, type: 3}
+  m_Name: Enemy2ShipToSpawnConfiguration
+  m_EditorClassIdentifier: 
+  _shipId: {fileID: 11400000, guid: f97a34d09bf444be28579b1baab17264, type: 2}
+  _defaultProjectileId: {fileID: 11400000, guid: 734ee743220a44bd0a0a62a05fef19a0,
+    type: 2}
+  _speed: {x: 3, y: 1.5}
+  _fireRate: 0.3
+  _health: 2
+  _score: 100
+  _amountToSpawn: 5

@@ -24,7 +24,7 @@ public class ShipInstaller : MonoBehaviour
     { 
         _joystick = GameObject.FindObjectOfType<Joystick>();
         _joyButton = GameObject.FindGameObjectWithTag("FireButton").GetComponent<JoyButton>();
-        ShipFactory shipFactory = new ShipFactory(Instantiate(_shipsConfiguration));
+        ShipFactory shipFactory = ServiceLocator.Instance.GetService<ShipFactory>();
         _shipBuilder = shipFactory.Create(_shipConfiguration.ShipId.Value)
             .WithConfiguration(_shipConfiguration)
             .WithTeams(Teams.Ally);

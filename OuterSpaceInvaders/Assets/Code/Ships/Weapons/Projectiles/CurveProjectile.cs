@@ -23,10 +23,6 @@ public class CurveProjectile : Projectile
 
         _currentTime += Time.deltaTime;
     }
-
-    protected override void DoDestroyIn()
-    {
-    }
 }
 
 

@@ -10,6 +10,8 @@ public class ProjectilesConfiguration : ScriptableObject
 
     private Dictionary<string, Projectile> _idToProjectilePrefab;
 
+    public Projectile[] ProjectilePrefabs => _projectilesIdPrefabs;
+
     private void Awake()
     {
         _idToProjectilePrefab = new Dictionary<string, Projectile>();

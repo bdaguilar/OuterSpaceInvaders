@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class WeaponController : MonoBehaviour
@@ -17,10 +18,12 @@ public class WeaponController : MonoBehaviour
     private string _activeProjjectileId;
     private Teams _team;
 
+    private List<Projectile> _aliveProjectiles;
+
     private void Awake()
     {
-        _projectileFactory = new ProjectileFactory(Instantiate(_projectilesConfiguration));
-        
+        _projectileFactory = ServiceLocator.Instance.GetService<ProjectileFactory>();
+        _aliveProjectiles = new List<Projectile>();
     }
 
     public void Configure(IShip shipMediator, ProjectileId defaultProjectileId, float fireRate, Teams team)
@@ -47,7 +50,25 @@ public class WeaponController : MonoBehaviour
     public void Shoot()
     {
         _cooldownSecondsToBeAbleToShoot = _fireRateInSeconds;
-        _projectileFactory.Create(_projectileSpawnPoint, _activeProjjectileId, _team);
+        Projectile projectile = _projectileFactory.Create(_projectileSpawnPoint, _activeProjjectileId, _team);
+        projectile.OnRecycle += OnDestroyProjectile;
+        _aliveProjectiles.Add(projectile);
+    }
+
+    private void OnDestroyProjectile(Projectile projectile)
+    {
+        _aliveProjectiles.Remove(projectile);
+        projectile.OnRecycle -= OnDestroyProjectile;
+    }
+
+    internal void Restart()
+    {
+        foreach(Projectile projectile in _aliveProjectiles)
+        {
+            projectile.Recycle();
+        }
+
+        _aliveProjectiles.Clear();
     }
 }
 
